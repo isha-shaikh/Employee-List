@@ -1,70 +1,68 @@
-# Getting Started with Create React App
+# Employee List
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React employee directory that renders staff records as responsive cards and
+applies bulk actions — promotion and salary hike — across every record at once.
 
-## Available Scripts
+Built by [Isha Nashir Shaikh](https://github.com/isha-shaikh).
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- Employee cards showing name, designation, salary (formatted as INR) and city
+- **Promote All** — prefixes every designation with "Senior" and raises salary by 30%
+- **Hike All** — raises every salary by 20%
+- Responsive three-column grid via React Bootstrap
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Stack
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+React 18 · React Bootstrap · Bootstrap 5 · Create React App
 
-### `npm test`
+## Running locally
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+git clone https://github.com/isha-shaikh/Employee-List.git
+cd Employee-List
+npm install
+npm start          # http://localhost:3000
+```
 
-### `npm run build`
+```bash
+npm run build      # production build to build/
+npm test
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## How it works
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+A single `EmployeeList` component holds the roster in `useState`. Both actions are
+pure transformations — they `map` over the current array, return new objects, and
+replace state, so React re-renders the whole grid.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```
+src/
+├── App.js
+└── Components/
+    ├── Employee.jsx         roster state, promote/hike handlers, card grid
+    └── EmployeeList.css     card styling
+```
 
-### `npm run eject`
+## Known limitations
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Being straightforward about the current scope:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- **This is not full CRUD.** There is no add, edit, or delete — only the two bulk
+  update actions. Individual records can't be modified.
+- **Data is hardcoded** in component state and **not persisted.** Any promotion or
+  hike is lost on refresh; there's no backend or database.
+- **Duplicate `id`** — two records ("Aqib" and "sana") both use `id: 8`, which
+  triggers React's "two children with the same key" warning and can cause
+  incorrect reconciliation.
+- **"Promote All" also overwrites `city`** to `"puna"` for every employee, which
+  looks unintentional given promotion shouldn't relocate staff.
+- **Data inconsistencies** — one record has an empty `city`, and one salary is
+  `460000` where every other value is five digits.
+- **Salary has no upper bound.** Repeated hikes compound indefinitely with no
+  validation or rounding.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Possible next steps
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Add/edit/delete per record, move the roster to a backend with persistence, fix the
+duplicate key, and separate the "transfer city" concern out of the promote action.
